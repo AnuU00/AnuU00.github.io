@@ -1,6 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
+import { getDatabase } from "firebase/database";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -9,7 +10,7 @@ import { getAnalytics } from "firebase/analytics";
 const firebaseConfig = {
   apiKey: "AIzaSyBrrPYPa_KVcCoQkCcQ51CxUA7RDMQBO9I",
   authDomain: "to-do-list-cef00.firebaseapp.com",
-  database: "https://to-do-list-cef00-default-rtdb.firebaseio.com/",
+  databaseURL: "https://to-do-list-cef00-default-rtdb.firebaseio.com/",
   projectId: "to-do-list-cef00",
   storageBucket: "to-do-list-cef00.appspot.com",
   messagingSenderId: "882467650863",
@@ -20,6 +21,7 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
+const db = getDatabase(app);
 firebase.database();
 
 const inputBox = document.getElementById("input-box");
@@ -70,13 +72,13 @@ window.addEventListener("scroll", function(){
 
 function saveData(){
     let tasks = listContainer.innerHTML;
-    database.ref('/').set({
+    ref(db, '/').set({
         tasks: tasks
     });
 }
 
 function showData(){
-    database.ref('/').once('value').then(function(snapshot) {
+    ref(db, '/').once('value').then(function(snapshot) {
         listContainer.innerHTML=snapshot.val().tasks;
     });
 }
