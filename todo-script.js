@@ -1,12 +1,9 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
-import { getDatabase } from "firebase/database";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+import { getDatabase, ref, set, onValue } from "firebase/database";
 
 // Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: "AIzaSyBrrPYPa_KVcCoQkCcQ51CxUA7RDMQBO9I",
   authDomain: "to-do-list-cef00.firebaseapp.com",
@@ -22,7 +19,6 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 const db = getDatabase(app);
-firebase.database();
 
 const inputBox = document.getElementById("input-box");
 const listContainer = document.getElementById("list-container");
@@ -72,14 +68,17 @@ window.addEventListener("scroll", function(){
 
 function saveData(){
     let tasks = listContainer.innerHTML;
-    ref(db, '/').set({
+    set(ref(db, '/'), {
         tasks: tasks
     });
 }
 
 function showData(){
-    ref(db, '/').once('value').then(function(snapshot) {
-        listContainer.innerHTML=snapshot.val().tasks;
+    onValue(ref(db, '/'), (snapshot) => {
+        const data = snapshot.val();
+        if (data) {
+            listContainer.innerHTML = data.tasks;
+        }
     });
 }
 showData();
