@@ -7,7 +7,7 @@ import { getDatabase, ref, set, onValue } from "firebase/database";
 const firebaseConfig = {
   apiKey: "AIzaSyBrrPYPa_KVcCoQkCcQ51CxUA7RDMQBO9I",
   authDomain: "to-do-list-cef00.firebaseapp.com",
-  databaseURL: "https://to-do-list-cef00-default-rtdb.firebaseio.com/",
+  databaseURL: "https://to-do-list-cef00-default-rtdb.firebaseio.com",
   projectId: "to-do-list-cef00",
   storageBucket: "to-do-list-cef00.appspot.com",
   messagingSenderId: "882467650863",
@@ -42,6 +42,7 @@ function addTask(){
 }
 
 listContainer.addEventListener("click", function(e){
+    // e.preventDefault();
     if(e.target.tagName === "LI"){
         e.target.classList.toggle("checked");
         saveData()
