@@ -9,6 +9,7 @@ import { getAnalytics } from "firebase/analytics";
 const firebaseConfig = {
   apiKey: "AIzaSyBrrPYPa_KVcCoQkCcQ51CxUA7RDMQBO9I",
   authDomain: "to-do-list-cef00.firebaseapp.com",
+  database: "https://to-do-list-cef00-default-rtdb.firebaseio.com/",
   projectId: "to-do-list-cef00",
   storageBucket: "to-do-list-cef00.appspot.com",
   messagingSenderId: "882467650863",
@@ -19,7 +20,7 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
-let database = firebase.database();
+firebase.database();
 
 const inputBox = document.getElementById("input-box");
 const listContainer = document.getElementById("list-container");
