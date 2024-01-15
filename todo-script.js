@@ -45,10 +45,21 @@ window.addEventListener("scroll", function(){
 })
 
 function saveData(){
-    localStorage.setItem("todo_data", listContainer.innerHTML);
+    let data = listContainer.innerHTML;
+    db.collection("todos").doc("list").set({
+        data: data
+    })
+    .then(() => console.log("Data saved successfully"))
+    .catch((error) => console.error("Error:", error));
 }
 
 function showData(){
-    listContainer.innerHTML = localStorage.getItem("todo_data");
+    db.collection("todos").doc("list").get().then((doc) => {
+        if (doc.exists) {
+            listContainer.innerHTML = doc.data().data;
+        } else {
+            console.log("No such document!");
+        }
+    }).catch((error) => console.error("Error:", error));
 }
 showData();
