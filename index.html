@@ -14,7 +14,7 @@
                     <img src="images/dustbin.png" class="bin" title="Clear Completed Tasks" onclick="clearTasks()" alt="remove tasks"></h2>
                 <div class="row">
                     <input type="text" id="input-box" placeholder="Add a task">
-                    <button onclick="addTask()">Add</button> <!-- Removed inline event handler -->
+                    <button onclick="addTask()">Add</button>
                 </div>
             
             </div>
@@ -30,13 +30,6 @@
         
 
     </div>
-<script>
-        // Import the functions you need from the SDKs you need
-    import { initializeApp } from "firebase/app";
-    import { getAnalytics } from "firebase/analytics";
-    import { getDatabase, ref, set, onValue } from "firebase/database";
-</script>
 <script src="todo-script.js"></script>
-
 </body>
 </html>
