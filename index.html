@@ -101,9 +101,9 @@
     })
 
     function saveData(){
-        let tasks = listContainer.innerHTML;
+        // let tasks = listContainer.innerHTML;
         db.ref('users/todo').set({
-            tasks: tasks
+            tasks: listContainer.value
         });
     }
 
