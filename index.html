@@ -102,7 +102,7 @@
 
     function saveData(){
         let tasks = listContainer.innerHTML;
-        firebase.database().ref('/').set({
+        db.ref('users/').push({
             tasks: tasks
         });
     }
