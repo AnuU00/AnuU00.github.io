@@ -102,13 +102,13 @@
 
     function saveData(){
         let tasks = listContainer.innerHTML;
-        db.ref('users/').push({
+        db.ref('users/todo').set({
             tasks: tasks
         });
     }
 
     function showData(){
-        firebase.database().ref('/').on('value', (snapshot) => {
+        firebase.database().ref('users/todo').on('value', (snapshot) => {
             const data = snapshot.val();
             if (data) {
                 listContainer.innerHTML = data.tasks;
