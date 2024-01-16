@@ -55,6 +55,11 @@
     const inputBox = document.getElementById("input-box");
     const listContainer = document.getElementById("list-container");
 
+    db.ref("users/alovelace").set({
+        name: "Ada Lovelace",
+        email: "alovelace@gmail.com"  
+    });
+
     function addTask(){
         let input = inputBox.value;
         let trimedInput = input.trim();
