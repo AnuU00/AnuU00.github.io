@@ -101,9 +101,9 @@
     })
 
     function saveData(){
-        // let tasks = listContainer.innerHTML;
-        db.ref('users/todo').set({
-            tasks: listContainer.value
+        let tasks = listContainer.innerHTML;
+        firebase.database().ref('users/todo').set({
+            tasks: tasks
         });
     }
 
