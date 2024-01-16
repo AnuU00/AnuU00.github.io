@@ -34,7 +34,7 @@
         
 
     </div>
-<script type="module">
+<script>
     // Import the functions you need from the SDKs you need
     // import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
     // import { getFirestore } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
@@ -56,10 +56,7 @@
     const inputBox = document.getElementById("input-box");
     const listContainer = document.getElementById("list-container");
 
-    db.ref("users/alovelace").set({
-        name: "Ada Lovelace",
-        email: "alovelace@gmail.com"  
-    });
+    
 
     function addTask(){
         let input = inputBox.value;
