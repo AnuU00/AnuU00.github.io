@@ -103,22 +103,19 @@
     })
 
     function saveData(){
-        let data = listContainer.innerHTML;
-        db.collection("todos").doc("list").set({
-            data: data
-        })
-        .then(() => console.log("Data saved successfully"))
-        .catch((error) => console.error("Error:", error));
+        let tasks = listContainer.innerHTML;
+        set(ref(db, '/'), {
+            tasks: tasks
+        });
     }
 
     function showData(){
-        db.collection("todos").doc("list").get().then((doc) => {
-            if (doc.exists) {
-                listContainer.innerHTML = doc.data().data;
-            } else {
-                console.log("No such document!");
+        onValue(ref(db, '/'), (snapshot) => {
+            const data = snapshot.val();
+            if (data) {
+                listContainer.innerHTML = data.tasks;
             }
-        }).catch((error) => console.error("Error:", error));
+        });
     }
     showData();
 </script>
