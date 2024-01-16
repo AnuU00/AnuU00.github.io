@@ -48,10 +48,10 @@
         appId: "1:882467650863:web:331fea17840da9878df5da",
         measurementId: "G-J9VG15WDD9"
     };
-    const app = initializeApp(firebaseConfig);
+    firebase.initializeApp(firebaseConfig);
 
 // Initialize Firestore
-    const db = getFirestore(app);
+    const db = firebase.database();
 
     const inputBox = document.getElementById("input-box");
     const listContainer = document.getElementById("list-container");
