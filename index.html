@@ -15,10 +15,10 @@
         <div class="todo-app">
             <div class="addDiv">
                 <h2>To-Do List <img src="images/todo_icon.png" alt="icon">
-                    <img src="images/dustbin.png" class="bin" title="Clear Completed Tasks" onclick="clearTasks()" alt="remove tasks"></h2>
+                    <img src="images/dustbin.png" class="bin" title="Clear Completed Tasks" id="clear-tasks" alt="remove tasks"></h2>
                 <div class="row">
                     <input type="text" id="input-box" placeholder="Add a task">
-                    <button onclick="addTask()">Add</button>
+                    <button id="add-task">Add</button>
                 </div>
             
             </div>
@@ -52,70 +52,113 @@
     const db = firebase.database();
 
     const inputBox = document.getElementById("input-box");
-    const listContainer = document.getElementById("list-container").value;
-
+    const listContainer = document.getElementById("list-container");
+    const addTaskBtn = document.getElementById("add-task");
+    const clearTasksBtn = document.getElementById("clear-tasks");
     
-
-    function addTask(){
-        let input = inputBox.value;
-        let trimedInput = input.trim();
-
-        if(trimedInput !== ''){
-            let li = document.createElement("li");
-            li.style.overflowWrap = "break-word";
-            li.innerHTML = inputBox.value;
-            listContainer.appendChild(li);
-            let span = document.createElement("span");
-            span.innerHTML = "\u00d7";
-            li.appendChild(span);
-        }
-        
-        inputBox.value = "";
-        saveData()
-    }
-
-    listContainer.addEventListener("click", function(e){
-        e.preventDefault();
-        if(e.target.tagName === "LI"){
-            e.target.classList.toggle("checked");
-            saveData()
-        }
-        else if(e.target.tagName === "SPAN"){
-            e.target.parentElement.remove();
-            saveData()
-        }
-    }, false);
-
-    function clearTasks(){
-        let checkedItems = document.querySelectorAll('.checked');
-
-        for(let i=0; i<checkedItems.length; i++){
-            checkedItems[i].remove();
-        }
-        saveData();
-    }
-
-    window.addEventListener("scroll", function(){
-        let addDiv = document.querySelector("h2");
-        addDiv.classList.toggle("sticky", this.window.scrollY > 0);
-    })
-
-    function saveData(){
-        let tasks = listContainer.innerHTML;
-        firebase.database().ref('users/todo').set({
-            tasks: tasks
+    addTaskBtn.addEventListener("click", function(){
+        let task = inputBox.value;
+        db.ref('tasks/').push({
+            task: task,
+            completed: false
         });
-    }
+        inputBox.value = '';
+    });
 
-    function showData(){
-        firebase.database().ref('users/todo').on('value', (snapshot) => {
-            const data = snapshot.val();
-            if (data) {
-                listContainer.innerHTML = data.tasks;
+    db.ref('tasks/').on('value', function(snapshot){
+        let tasks = snapshot.val();
+        listContainer.innerHTML = '';
+        for(let id in tasks){
+            let task = tasks[id];
+            let listItem = document.createElement("li");
+            listItem.textContent = task.task;
+            listItem.addEventListener("click", function(){
+                db.ref('tasks/' + id).update({
+                    completed: !task.completed
+                });
+            });
+            let deleteBtn = document.createElement("button");
+            deleteBtn.textContent = "x";
+            deleteBtn.addEventListener("click", function(){
+                db.ref('tasks/' + id).remove();
+            });
+            listItem.appendChild(deleteBtn);
+            listContainer.appendChild(listItem);
+        }
+    });
+
+    clearTasksBtn.addEventListener("click", function() {
+        db.ref('tasks/').once('value', function(snapshot) {
+            var tasks = snapshot.val();
+            for(var id in tasks) {
+                var task = tasks[id];
+                if(task.completed) {
+                    database.ref('tasks/' + id).remove();
+                }
             }
         });
-    }
-    showData();
+    });
+
+    // function addTask(){
+    //     let input = inputBox.value;
+    //     let trimedInput = input.trim();
+
+    //     if(trimedInput !== ''){
+    //         let li = document.createElement("li");
+    //         li.style.overflowWrap = "break-word";
+    //         li.innerHTML = inputBox.value;
+    //         listContainer.appendChild(li);
+    //         let span = document.createElement("span");
+    //         span.innerHTML = "\u00d7";
+    //         li.appendChild(span);
+    //     }
+        
+    //     inputBox.value = "";
+    //     saveData()
+    // }
+
+    // listContainer.addEventListener("click", function(e){
+    //     e.preventDefault();
+    //     if(e.target.tagName === "LI"){
+    //         e.target.classList.toggle("checked");
+    //         saveData()
+    //     }
+    //     else if(e.target.tagName === "SPAN"){
+    //         e.target.parentElement.remove();
+    //         saveData()
+    //     }
+    // }, false);
+
+    // function clearTasks(){
+    //     let checkedItems = document.querySelectorAll('.checked');
+
+    //     for(let i=0; i<checkedItems.length; i++){
+    //         checkedItems[i].remove();
+    //     }
+    //     saveData();
+    // }
+
+    // window.addEventListener("scroll", function(){
+    //     let addDiv = document.querySelector("h2");
+    //     addDiv.classList.toggle("sticky", this.window.scrollY > 0);
+    // })
+
+    // function saveData(){
+    //     let tasks = listContainer.innerHTML;
+    //     firebase.database().ref('users/todo').set({
+    //         tasks: tasks
+    //     });
+    // }
+
+    // function showData(){
+    //     firebase.database().ref('users/todo').on('value', (snapshot) => {
+    //         const data = snapshot.val();
+    //         if (data) {
+    //             listContainer.innerHTML = data.tasks;
+    //         }
+    //     });
+    // }
+    // showData();
 </script>
 
 
