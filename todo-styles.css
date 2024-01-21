@@ -40,9 +40,11 @@
 
 .bin{
     position: relative;
-    left: 55%;
+    left: 50%;
+    transform: translateX(-50%);
     border-radius: 50%;
     cursor: pointer;
+    max-width: 40px;
     
 }
 
