@@ -48,6 +48,27 @@
     };
     firebase.initializeApp(firebaseConfig);
 
+    const messaging = firebase.messaging();
+
+    // Request permission for notifications
+    messaging.requestPermission().then(() => {
+        console.log('Notification permission granted');
+        // Get the token
+        return messaging.getToken();
+    }).then((token) => {
+        console.log('Token:', token);
+    }).catch((error) => {
+        console.error('Error getting permission or token:', error);
+    });
+
+    // Handle incoming messages (when the app is in the foreground)
+    messaging.onMessage((payload) => {
+        console.log('Message received:', payload);
+        // You can customize how to handle the incoming message here
+        // For example, show a notification using the Notification API
+        showNotification(payload.notification.title, payload.notification.body);
+    });
+
 // Initialize Firestore
     const db = firebase.database();
 
