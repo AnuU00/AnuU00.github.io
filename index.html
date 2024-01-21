@@ -17,7 +17,7 @@
                 <h2>To-Do List <img src="images/todo_icon.png" alt="icon">
                     <img src="images/dustbin.png" class="bin" title="Clear Completed Tasks" id="clear-tasks" alt="remove tasks"></h2>
                 <div class="row">
-                    <textarea id="input-box" placeholder="Add a task" maxlength="400"></textarea>
+                    <textarea id="input-box" placeholder="Enter a task" maxlength="400"></textarea>
                     <button id="add-task">Add</button>
                 </div>
             
@@ -64,7 +64,8 @@
                 task: task,
                 completed: false
             });
-        inputBox.value = '';
+            inputBox.value = '';
+            showNotification("New Task Added", task);
         }
         
     });
@@ -181,6 +182,19 @@
             }
         });
     });
+
+    function showNotification(title, body){
+        if(Notification.permission === "granted"){
+            new Notification(title, {body: body});
+        }
+        else if(Notification.permission !== "denied"){
+            Notification.requestPermission().then(function(permission){
+                if(permission === "granted"){
+                    new Notification(title, {body: body});
+                }
+            });
+        }
+    }
 
     // function addTask(){
     //     let input = inputBox.value;
