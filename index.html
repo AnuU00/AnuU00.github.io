@@ -17,7 +17,7 @@
                 <h2>To-Do List <img src="images/todo_icon.png" alt="icon">
                     <img src="images/dustbin.png" class="bin" title="Clear Completed Tasks" id="clear-tasks" alt="remove tasks"></h2>
                 <div class="row">
-                    <input type="text" id="input-box" placeholder="Add a task">
+                    <textarea id="input-box" placeholder="Add a task" maxlength="400"></textarea>
                     <button id="add-task">Add</button>
                 </div>
             
@@ -57,17 +57,24 @@
     const clearTasksBtn = document.getElementById("clear-tasks");
     
     addTaskBtn.addEventListener("click", function(){
-        let task = inputBox.value;
-        db.ref('tasks/').push({
-            task: task,
-            completed: false
-        });
+        let trimedInput = inputBox.value.trim();
+        if(trimedInput !== ''){
+            let task = inputBox.value;
+            db.ref('tasks/').push({
+                task: task,
+                completed: false
+            });
         inputBox.value = '';
+        }
+        
     });
 
     function createAndAppendTask(id, task){
         let listItem = document.createElement("li");
-        listItem.textContent = task.task;
+        
+        let formattedTask = task.task.replace(/\n/g, '<br>');
+        listItem.innerHTML = formattedTask;
+        // listItem.style.whiteSpace = "pre-line";
         let closeIcon = document.createElement("span");
         closeIcon.innerHTML = "\u00d7";
         closeIcon.className = "close-icon";

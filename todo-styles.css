@@ -66,7 +66,7 @@
     margin-bottom: 25px;
 }
 
-input{
+/* input{
     position: relative;
     left: 20px;
     flex: 1;
@@ -75,6 +75,17 @@ input{
     background: transparent;
     padding: 10px;
     font-weight: 14px;
+} */
+.row textarea {
+    position: relative;
+    left: 20px;
+    flex: 1;
+    border: none;
+    outline: none;
+    background: transparent;
+    padding: 10px;
+    font-weight: 14px;
+    resize: none; /* Prevent textarea resizing */
 }
 
 button{
@@ -99,6 +110,7 @@ ul li{
     position: relative;
     display: flex; /* Added this */
     align-items: center; /* Added this */
+    /* word-wrap: break-word; */
     }
 
 ul li::before{
