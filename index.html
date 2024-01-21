@@ -65,35 +65,111 @@
         inputBox.value = '';
     });
 
+    function createAndAppendTask(id, task){
+        let listItem = document.createElement("li");
+        listItem.textContent = task.task;
+        let closeIcon = document.createElement("span");
+        closeIcon.innerHTML = "\u00d7";
+        closeIcon.className = "close-icon";
+        listItem.appendChild(closeIcon);
+            // Add a data-id attribute to store the task ID
+        listItem.setAttribute("data-id", id);
+        if (task.completed) {
+            listItem.classList.add("checked");
+        }
+        listItem.addEventListener("click", function(e){
+            e.stopPropagation();
+            toggleTaskStatus(id, listItem);
+            // Toggle the "checked" class for styling
+            // 
+            
+        });
+
+        closeIcon.addEventListener("click", function(e) {
+            e.stopPropagation();
+            removeTask(id, listItem);
+        // Remove the task from the database and update the UI
+            // 
+        });
+        return listItem;
+    }
+
+    function toggleTaskStatus(id, listItem){
+        db.ref('tasks/' + id).once('value', function(snapshot){
+            let task = snapshot.val();
+            listItem.classList.toggle("checked");
+            db.ref('tasks/' + id).update({
+                completed: !task.completed
+            });
+        });
+        
+    }
+
+    function removeTask(id, listItem){
+        db.ref('tasks/' + id).remove();
+            listItem.remove();
+    }
+
+    
+    
+
     db.ref('tasks/').on('value', function(snapshot){
         let tasks = snapshot.val();
         listContainer.innerHTML = '';
+        let task, listItem;
         for(let id in tasks){
-            let task = tasks[id];
-            let listItem = document.createElement("li");
-            listItem.textContent = task.task;
-            listItem.addEventListener("click", function(){
-                db.ref('tasks/' + id).update({
-                    completed: !task.completed
-                });
-            });
-            let deleteBtn = document.createElement("button");
-            deleteBtn.textContent = "x";
-            deleteBtn.addEventListener("click", function(){
-                db.ref('tasks/' + id).remove();
-            });
-            listItem.appendChild(deleteBtn);
+            task = tasks[id];
+            listItem = createAndAppendTask(id, task);
+            
+
+            // Check if the task is completed and toggle the class accordingly
+            
+
             listContainer.appendChild(listItem);
+
+            
+
+            
+
+            
+
+            
+
+            
+            // listContainer.addEventListener("click", function(e){
+            // e.preventDefault();
+            // if(e.target.tagName === "LI"){
+            //     e.target.classList.toggle("checked");
+                
+            //     listItem.addEventListener("click", function(){
+            //         db.ref('tasks/' + id).update({
+            //             completed: !task.completed
+            //         });
+            //     });
+
+            //     // saveData()
+            // }
+            // else if(e.target.tagName === "SPAN"){
+            //     e.target.parentElement.remove();
+            //     db.ref('tasks/' + id).remove();
+                
+            //     // saveData()
+            // }
+            // }, false);
+            
+            
+            
         }
+        
     });
 
     clearTasksBtn.addEventListener("click", function() {
         db.ref('tasks/').once('value', function(snapshot) {
-            var tasks = snapshot.val();
-            for(var id in tasks) {
-                var task = tasks[id];
+            let tasks = snapshot.val();
+            for(let id in tasks) {
+                let task = tasks[id];
                 if(task.completed) {
-                    database.ref('tasks/' + id).remove();
+                    db.ref('tasks/' + id).remove();
                 }
             }
         });
@@ -117,17 +193,7 @@
     //     saveData()
     // }
 
-    // listContainer.addEventListener("click", function(e){
-    //     e.preventDefault();
-    //     if(e.target.tagName === "LI"){
-    //         e.target.classList.toggle("checked");
-    //         saveData()
-    //     }
-    //     else if(e.target.tagName === "SPAN"){
-    //         e.target.parentElement.remove();
-    //         saveData()
-    //     }
-    // }, false);
+    
 
     // function clearTasks(){
     //     let checkedItems = document.querySelectorAll('.checked');
